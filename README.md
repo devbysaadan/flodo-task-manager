@@ -1,38 +1,70 @@
-# KaaJu Task Manager 
+# 🚀 KaaJu: Task Management  (Assignment)
 
-**Flodo AI Take-Home Assignment**
+A functional, visually polished Task Management application built with Flutter. This project showcases high-agency problem solving, clean architecture, and modern development workflows using AI-assisted engineering.
 
-## Track & Stretch Goal
-- **Track**: Track B: The Mobile Specialist (Flutter + GetX + GetStorage)
-- **Stretch Goal**: Debounced Autocomplete Search with Text Highlighting! ✨
+---
 
-## Key Features Implemented:
-1. **Clean Architecture & State Management**: Complete `GetX` architecture moving logic out of UI and utilizing reactive state management (`Obx`, `Rx`).
-2. **Task Data Model**: Implemented `Task` entity with `Title`, `Description`, `Due Date`, `Status`, and optional `Blocked By` functionality.
-3. **Advanced UI Constraints (Blocked Logic)**: Blocked tasks appear visually greyed out (opacity 0.4) and disabled from clicks until the blocking task reaches `Done` status.
-4. **Mocked Network Delays**: Enforced a `Future.delayed(Duration(seconds: 2))` on Create/Update requests. Provided smooth visual feedback with `CircularProgressIndicator` inside disabled Save buttons dynamically, maintaining stable UI frames.
-5. **Drafts Logic**: Utilized `GetStorage` to persist input from the bottom-sheet form to disk while typing using `onChange`. Minimizing or closing unrecoverable screens will preserve text for next use automatically.
-6. **Debounced Search with Highlighting**: Implemented a `Timer`-based 300ms Search Debouncer that filters dynamically, and utilized standard regex/Substrings mapping to apply `RichText` highlight layers internally over matched String queries inside the titles dynamically.
+## 🛠 Tech Stack & Tools
+- **Framework**: Flutter (Material 3)
+- **State Management**: GetX (Reactive Programming)
+- **Local Persistence**: GetStorage
+- **IDE**: **Antigravity IDE** (Leveraged for high-performance indexing and rapid prototyping)
+- **AI Collaborator**: **Gemini 3 Flash** (Used for architectural brainstorming and logic optimization)
 
-## Steps to Run Locally
-1. Clone the repository and navigate to the project directory:
-   ```bash
-   cd kaaju
-   ```
-2. Fetch flutter dependencies:
-   ```bash
-   flutter pub get
-   ```
-3. Run the app on standard physical devices or emulators (iOS / Android / MacOS):
-   ```bash
-   flutter run
-   ```
+---
 
-## AI Usage Report
-I utilized AI (Gemini) strictly to expedite boilerplate refactoring, primarily focusing on creating clean data structures and isolating UI controllers into the GetX syntax structure.
-**Prompting highlights:** 
-- "Refactor `Task` model to have due-date and enum state parsing for json storage mapping"
-- "Help write the logic for the Debounced text query with highlight spans for title matching"
+## 🛠 Track & Stretch Goal
+- **Track**: **Track B: The Mobile Specialist**
+- **Stretch Goal**: **Debounced Autocomplete Search with Text Highlighting** ✨
 
-**Handling Halucinations:**
-While running `flutter analyze`, the AI occasionally deprecated features. For example, using `value` inside form fields deprecated since Flutter v3.33. The fix involved catching this warning manually using `flutter analyze` and refactoring FormFields internally to `DropdownButton` bounded inside generic `InputDecorator` constraints to meet the new strict Flutter UI guidelines.
+## 🎁 High-Agency Bonus Features
+- 🌓 **Global Dark Mode**: A seamless, system-wide dark theme implementation.
+- 📌 **Task Pinning**: Added functionality to pin priority tasks to the top of the list.
+- 👤 **Profile Context**: Dedicated screen for persistent user identity and theme preferences.
+- 🎬 **Micro-interactions**: Subtle animations using `flutter_animate` for a premium feel.
+
+---
+
+## ✨ Key Features & Technical Decisions
+
+| Feature | Technical Implementation |
+| :--- | :--- |
+| **Reactive State** | Utilized `Obx` and `Rx` variables to ensure the UI reacts instantly to data changes without manual rebuilds. |
+| **Blocked Logic** | Implemented a dependency-check algorithm; Blocked tasks are visually greyed out (0.4 opacity) and wrapped in an `AbsorbPointer` to prevent premature interaction. |
+| **Simulated Latency** | Enforced a 2-second `Future.delayed` on CRUD operations. Managed via `isLoading` state to disable buttons and provide visual feedback (loaders). |
+| **Persistence Layer** | Used `GetStorage` for real-time **Draft Management**. Unsaved form data is persisted to disk on-the-fly, ensuring a crash-proof user experience. |
+| **Search Engine** | Built a custom **Debouncer (300ms)** to prevent redundant filtering. Matched strings are rendered using `TextSpan` for real-time highlighting. |
+
+---
+
+## 🏗 Project Architecture (Layered Clean)
+I followed a strict separation of concerns to ensure the code is testable and maintainable:
+- `models/`: Immutable entities with JSON serialization.
+- `controllers/`: Core business logic, storage gateways, and UI-state orchestration.
+- `screens/`: Highly modular UI layouts.
+- `widgets/`: Reusable, atomic UI components.
+
+---
+
+## 🤖 AI Usage & Learning Report
+Developed in an **AI-First workflow** using **Antigravity IDE** and **Gemini**, focusing on rapid iteration and high-quality refactoring.
+
+**Key Prompting Strategies:**
+1. *"Architect a robust GetX controller that handles asynchronous persistence with GetStorage and prevents race conditions during a 2-second mocked delay."*
+2. *"Generate an optimized logic to find matching substrings within task titles and return a List<TextSpan> for background highlighting."*
+
+**Handling AI Hallucinations:**
+While the AI initially suggested legacy `DropdownButton` properties, I identified layout overflow issues during testing. I corrected this by refactoring the UI to use `InputDecorator` with custom constraints, meeting modern Material 3 specifications—a fix that highlights my ability to manually verify and refine AI-generated code.
+
+---
+
+## 🚀 Setup & Execution
+1. **Clone**: `git clone https://github.com/devbysaadan/flodo-task-manager`
+2. **Dependencies**: `flutter pub get`
+3. **Launch**: `flutter run`
+
+---
+
+## 📽 Demo Video
+[**Watch the 90-second Technical Walkthrough**](https://drive.google.com/file/d/12luMhdTgZprhPQkcCNve17FAq4OCETkX/view?usp=sharing)  
+*(Please ensure Nilay@flodo.ai has view access)*
