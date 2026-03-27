@@ -9,6 +9,7 @@ class Task {
   DateTime dueDate;
   TaskStatus status;
   String? blockedBy;
+  bool isPinned;
 
   Task({
     required this.id,
@@ -17,6 +18,7 @@ class Task {
     required this.dueDate,
     this.status = TaskStatus.todo,
     this.blockedBy,
+    this.isPinned = false,
   });
 
   Map<String, dynamic> toMap() {
@@ -27,6 +29,7 @@ class Task {
       'dueDate': dueDate.toIso8601String(),
       'status': status.index,
       'blockedBy': blockedBy,
+      'isPinned': isPinned,
     };
   }
 
@@ -38,6 +41,7 @@ class Task {
       dueDate: map['dueDate'] != null ? DateTime.parse(map['dueDate']) : DateTime.now(),
       status: map['status'] != null ? TaskStatus.values[map['status']] : TaskStatus.todo,
       blockedBy: map['blockedBy'],
+      isPinned: map['isPinned'] ?? false,
     );
   }
 

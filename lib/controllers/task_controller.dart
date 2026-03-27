@@ -66,6 +66,15 @@ class TaskController extends GetxController {
     saveToDisk();
   }
 
+  void togglePinTask(String id) {
+    int index = tasks.indexWhere((t) => t.id == id);
+    if(index != -1) {
+      tasks[index].isPinned = !tasks[index].isPinned;
+      tasks.refresh();
+      saveToDisk();
+    }
+  }
+
   // --- Draft Logic (Persist text while typing but not saved) ---
   void saveDraft(String title, String desc) {
     _box.write('draft_title', title);
@@ -91,11 +100,20 @@ class TaskController extends GetxController {
   }
 
   List<Task> get filteredTasks {
-    return tasks.where((task) {
+    final filtered = tasks.where((task) {
       final matchesSearch = task.title.toLowerCase().contains(searchQuery.value.toLowerCase());
       final matchesStatus = filterStatus.value == null || task.status == filterStatus.value;
       return matchesSearch && matchesStatus;
     }).toList();
+    
+    // Sort so pinned tasks appear first
+    filtered.sort((a, b) {
+      if (a.isPinned && !b.isPinned) return -1;
+      if (!a.isPinned && b.isPinned) return 1;
+      return 0; 
+    });
+    
+    return filtered;
   }
 
   // Blocked Logic: Task B is blocked if Task A is not "Done"

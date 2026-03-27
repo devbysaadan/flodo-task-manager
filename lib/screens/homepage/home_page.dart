@@ -231,6 +231,7 @@ class _HomePageState extends State<HomePage> {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: isBlocked ? null : () => _showTaskForm(task: task),
+                        onLongPress: () => _showTaskActionSheet(task),
                         child: IntrinsicHeight(
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -253,6 +254,11 @@ class _HomePageState extends State<HomePage> {
                                             child: _buildHighlightedTitle(task.title, controller.searchQuery.value),
                                           ),
                                           const SizedBox(width: 12),
+                                          if (task.isPinned)
+                                            Padding(
+                                              padding: const EdgeInsets.only(right: 8.0, top: 4.0),
+                                              child: Icon(Icons.push_pin_rounded, size: 16, color: gradientEnd),
+                                            ),
                                           _buildStatusBadge(task.status),
                                         ],
                                       ),
@@ -428,6 +434,99 @@ class _HomePageState extends State<HomePage> {
       TaskFormModal(task: task),
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
+    );
+  }
+
+  void _showTaskActionSheet(Task task) {
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+        decoration: BoxDecoration(
+          color: cardColor,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.3),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              "Task Options",
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: textColor,
+              ),
+            ),
+            const SizedBox(height: 16),
+            ListTile(
+              leading: Icon(
+                task.isPinned ? Icons.push_pin_outlined : Icons.push_pin_rounded, 
+                color: gradientEnd
+              ),
+              title: Text(
+                task.isPinned ? "Unpin Task" : "Pin Task",
+                style: TextStyle(fontFamily: 'Poppins', color: textColor, fontWeight: FontWeight.w500),
+              ),
+              onTap: () {
+                Get.back();
+                controller.togglePinTask(task.id);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.delete_outline_rounded, color: Colors.redAccent),
+              title: const Text(
+                "Delete Task",
+                style: TextStyle(fontFamily: 'Poppins', color: Colors.redAccent, fontWeight: FontWeight.w500),
+              ),
+              onTap: () {
+                Get.back();
+                _showDeleteConfirmation(task.id);
+              },
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+    );
+  }
+
+  void _showDeleteConfirmation(String id) {
+    Get.dialog(
+      AlertDialog(
+        backgroundColor: cardColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text("Delete Task", style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.bold, color: textColor)),
+        content: Text("Are you sure you want to delete this task? This action cannot be undone.", 
+          style: TextStyle(fontFamily: 'Poppins', color: subTextColor)),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text("Cancel", style: TextStyle(fontFamily: 'Poppins', color: subTextColor, fontWeight: FontWeight.w600)),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.redAccent,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            onPressed: () {
+              controller.deleteTask(id);
+              Get.back();
+            },
+            child: const Text("Delete", style: TextStyle(fontFamily: 'Poppins', color: Colors.white, fontWeight: FontWeight.w600)),
+          ),
+        ],
+      ),
     );
   }
 }
